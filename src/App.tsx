@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
-import User from './user'
+import AppRouter from './components/AppRouter'
+
 
 const App: FC = () => {
-  return (
-    <div>
-      <User></User>
-      Работает!
-    </div>
+  return ( 
+    <div>      
+      <AppRouter/>
+    </div> 
   )
 }
 
