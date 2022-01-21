@@ -8,7 +8,8 @@ const AppRouter = () => {
   
   return (
     isAuth
-      ? <Routes>
+      ? 
+        <Routes>
           {privateRoutes.map(route => 
             <Route path={route.path}
                    element={<route.element/>}
@@ -17,7 +18,8 @@ const AppRouter = () => {
           )}
           <Route path='*' element={<Navigate to={RouteNames.EVENT}/>}/>
         </Routes>
-      : <Routes>
+      : 
+        <Routes>
           {publicRoutes.map(route => 
             <Route path={route.path}
                    element={<route.element/>}

@@ -12,4 +12,4 @@ export type AppDispatch = typeof store.dispatch
 
 
 // @ts-ignore
-window.state = store.getState()
+window.store = store

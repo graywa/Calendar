@@ -1,8 +1,8 @@
-import axios from 'axios'
+import UserService from '../../api/UserService'
 import { AppDispatch } from '../redux-store'
 
 
-interface IUser {
+export interface IUser {
   username: string
   password: string
 }
@@ -38,45 +38,38 @@ interface SetErrorAction {
 type AuthActions = SetAuthAction | SetUserAction | SetErrorAction | SetIsLoadingAction
 
 export const AuthActionCreators = {
-  setAuth: (auth: boolean) => ({type: AuthActionEnum.SET_AUTH, payload: auth}),
-  setUser: (user: IUser) => ({type: AuthActionEnum.SET_USER, payload: user}),
-  setIsLoading: (isLoad: boolean) => ({type: AuthActionEnum.SET_IS_LOADING, payload: isLoad}),
-  setError: (error: string) => ({type: AuthActionEnum.SET_ERROR, payload: error}),
+  setAuth: (auth: boolean): SetAuthAction => ({type: AuthActionEnum.SET_AUTH, payload: auth}),
+  setUser: (user: IUser): SetUserAction => ({type: AuthActionEnum.SET_USER, payload: user}),
+  setIsLoading: (isLoad: boolean): SetIsLoadingAction => (
+    {type: AuthActionEnum.SET_IS_LOADING, payload: isLoad}),
+  setError: (error: string): SetErrorAction => ({type: AuthActionEnum.SET_ERROR, payload: error}),
   login: (username: string, password: string) => async (dispatch: AppDispatch) => {
-    try {       
-      // @ts-ignore
+    try {     
       dispatch(AuthActionCreators.setIsLoading(true))
       setTimeout(async() => {
-        const response = await axios.get<IUser[]>('./users.json')  
+        const response = await UserService.getUsers()  
         const mockUser = response.data.find(user => {
           return user.username === username && user.password === password
         }) 
         if(mockUser) {
           localStorage.setItem('auth', 'true')
           localStorage.setItem('user', mockUser.username)
-          // @ts-ignore
           dispatch(AuthActionCreators.setAuth(true))
-          // @ts-ignore
           dispatch(AuthActionCreators.setUser(mockUser))
         } else {
-          // @ts-ignore
           dispatch(AuthActionCreators.setError('invalid username or password'))
         }
-        // @ts-ignore
         dispatch(AuthActionCreators.setIsLoading(false))    
       }, 1000)
  
     } catch (e) {
-      // @ts-ignore
       dispatch(AuthActionCreators.setError('an error accurred during login'))
     }    
   },
   logout: () => async (dispatch: AppDispatch) => {    
     localStorage.removeItem('auth')
     localStorage.removeItem('user')
-    // @ts-ignore
     dispatch(AuthActionCreators.setAuth(false))
-    // @ts-ignore
     dispatch(AuthActionCreators.setUser({} as IUser))    
   }
 
