@@ -8,4 +8,8 @@ const rootReducer = combineReducers(reducers)
 export const store = createStore(rootReducer, applyMiddleware(thunk))
 
 export type AppStateType = ReturnType<typeof store.getState>
-export type DispatchType = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch
+
+
+// @ts-ignore
+window.state = store.getState()
